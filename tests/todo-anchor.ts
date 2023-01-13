@@ -23,6 +23,7 @@ describe("todo-anchor", () => {
       utf8.encode('USER_STATE'),
       defaultAccount.publicKey.toBuffer()
     ], program.programId)
+
   
     // const tx = await program.methods.initializeUser().accounts({
     //   authority: defaultAccount.publicKey,
@@ -33,7 +34,7 @@ describe("todo-anchor", () => {
     // .rpc();
     // console.log("Your transaction signature", tx);
   
-   
+    
   });
 
   it("Add todo!", async () => {    
@@ -49,16 +50,62 @@ describe("todo-anchor", () => {
     const [todoAccountPDA] = await anchor.web3.PublicKey.findProgramAddress([
       utf8.encode('TODO_STATE'),
       defaultAccount.publicKey.toBuffer(),
-      Buffer.from([userProfileData.lastTodo])
+      Buffer.from([0])
+    ], program.programId)
+    console.log("todoAccountPDA", todoAccountPDA.toBase58());
+    // const tx = await program.methods.addTodo("new todo").accounts({
+    //   userProfile: userProfilePDA,
+    //   todoAccount: todoAccountPDA,
+    //   authority: defaultAccount.publicKey,
+    //   systemProgram: anchor.web3.SystemProgram.programId,
+    // })
+    // .signers([defaultAccount])
+    // .rpc();
+    // console.log("Your transaction signature", tx);
+  });
+
+  it("Mark todo!", async () => {    
+    const [userProfilePDA] = await anchor.web3.PublicKey.findProgramAddress([
+      utf8.encode('USER_STATE'),
+      defaultAccount.publicKey.toBuffer()
     ], program.programId)
 
-    const tx = await program.methods.addTodo("new todo").accounts({
-      userProfile: userProfilePDA,
+    const [todoAccountPDA] = await anchor.web3.PublicKey.findProgramAddress([
+      utf8.encode('TODO_STATE'),
+      defaultAccount.publicKey.toBuffer(),
+      Buffer.from([0])
+    ], program.programId)
+    console.log("todoAccountPDA", todoAccountPDA.toBase58());
+
+    // const tx = await program.methods.markTodo(0).accounts({
+    //   todoAccount: todoAccountPDA,
+    //   authority: defaultAccount.publicKey,
+    //   userProfile: userProfilePDA,
+    //   systemProgram: anchor.web3.SystemProgram.programId,
+    // }).signers([defaultAccount])
+    // .rpc();
+    // console.log("Your transaction signature", tx);
+  });
+
+  it("Remove todo item!", async () => {    
+    const [userProfilePDA] = await anchor.web3.PublicKey.findProgramAddress([
+      utf8.encode('USER_STATE'),
+      defaultAccount.publicKey.toBuffer()
+    ], program.programId)
+
+    const [todoAccountPDA] = await anchor.web3.PublicKey.findProgramAddress([
+      utf8.encode('TODO_STATE'),
+      defaultAccount.publicKey.toBuffer(),
+      Buffer.from([0])
+    ], program.programId)
+    console.log("todoAccountPDA", todoAccountPDA.toBase58());
+
+    const tx = await program.methods.removeTodo(0).accounts({
       todoAccount: todoAccountPDA,
       authority: defaultAccount.publicKey,
+      userProfile: userProfilePDA,
       systemProgram: anchor.web3.SystemProgram.programId,
-    })
-    .signers([defaultAccount])
+    }).signers([defaultAccount])
     .rpc();
     console.log("Your transaction signature", tx);
   });
