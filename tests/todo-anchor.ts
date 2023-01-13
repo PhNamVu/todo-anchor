@@ -2,14 +2,11 @@ import * as anchor from "@project-serum/anchor";
 import { utf8 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 
 import {
-  Connection,
   Keypair,
-  PublicKey
 } from '@solana/web3.js';
 
 import { Program } from "@project-serum/anchor";
 import { TodoAnchor } from "../target/types/todo_anchor";
-import { BN } from "bn.js";
 
 describe("todo-anchor", () => {
   // Configure the client to use the local cluster.
@@ -49,7 +46,7 @@ describe("todo-anchor", () => {
 
     console.log(userProfileData)
 
-    const [todoAccountPDA, todoNonce] = await anchor.web3.PublicKey.findProgramAddress([
+    const [todoAccountPDA] = await anchor.web3.PublicKey.findProgramAddress([
       utf8.encode('TODO_STATE'),
       defaultAccount.publicKey.toBuffer(),
       Buffer.from([userProfileData.lastTodo])
